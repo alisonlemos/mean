@@ -4,6 +4,7 @@ angular.module('contatos').controller('ContatosController', function($scope,$res
 
 	$scope.filtro = '';
 
+	$scope.mensagem = {texto: ''};
 
 	var Contato = $resource('/contatos/:id');
 	function buscaContatos() 
@@ -11,7 +12,7 @@ angular.module('contatos').controller('ContatosController', function($scope,$res
 		Contato.query(
 			function(contatos) 
 			{
-				$scope.contatos = contatos.data;
+				$scope.contatos = contatos;
 			},
 			function(erro) 
 			{
@@ -22,5 +23,18 @@ angular.module('contatos').controller('ContatosController', function($scope,$res
 	}
 
 	buscaContatos();
+
+
+	$scope.remove = function(contato) 
+	{
+		Contato.delete({id: contato._id},
+			buscaContatos,
+			function(erro) 
+			{
+				console.log('Não foi possível remover o contato');
+				console.log(erro);
+			}
+		);
+	};
 
 });
